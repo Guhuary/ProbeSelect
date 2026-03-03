@@ -1,0 +1,137 @@
+_target_: src.models.latent_module.QualityPredictionModule
+args:
+  net_para:
+    _target_: src.models.components.model.ProbHeads
+    latent_channels: ${extras.input_dim}
+    latent_height: 48
+    latent_width: 48
+    hidden_dims: [128, 256]  # [640, 1280]
+    hidden_dims_mlp: [512]  # [1024]
+    dropout_rate: 0.5
+    use_batch_norm: True
+    activation: "relu"
+    num_layers: 1 
+    resnet_eps: 1e-5
+    resnet_act_fn: silu
+    resnet_groups: 16 
+    attention_head_dim: 5 
+    output_scale_factor: 1.0
+    downsample_type: conv # conv4
+    temb_channels: 512
+    num_channels_time: 64
+    # time_embed_dim: 64
+    used_keys: ${extras.used_keys}
+
+  loss:
+    clip16:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.3  # std: 2.9
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    clip32:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.3  # std: 2.9
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    as:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.3  # std: 0.75
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    pick:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  # std: 1.05
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    ICT:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    HP:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    ICT_HP:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    BLIP_ITC:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    BLIP_ITM:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    ImgReward:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    HPSv20:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+    HPSv21:
+      _target_: src.models.loss.loss.RankingLossMargin_InfoNCE_CORR
+      max_temperature: ${extras.max_temperature}
+      sim_margin: ${extras.sim_margin}
+      max_margin: 0.1  
+      lambda_list: ${extras.lambda_list}
+      lambda_infonce: ${extras.lambda_infonce}
+      lambda_corr: ${extras.lambda_corr}
+  optimizer_para:
+    _target_: torch.optim.AdamW
+    lr: 5e-5
+    weight_decay: 1e-2
+
+  scheduler_para:
+    _target_: torch.optim.lr_scheduler.CosineAnnealingWarmRestarts
+    T_0: 10  # Restart every 10 epochs
+    T_mult: 2
+    eta_min: 1e-6
+
+  monitor: ${extras.monitor}
+  frequency: 5
+  ema_rate: 0.999
+  use_ema: True
+  used_keys: ${extras.used_keys}

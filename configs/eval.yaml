@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - extras: default
+  - data: latent # choose datamodule with `test_dataloader()` for evaluation
+  - model: latent_pca_alltime
+  - logger: null
+  - trainer: default
+  - paths: default
+  - hydra: default
+
+task_name: "DIQE"
+
+tags: ["dev"]
+
+# passing checkpoint path is necessary for evaluation
+ckpt_path: ???

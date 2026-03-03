@@ -1,0 +1,20 @@
+# disable python warnings if they annoy you
+ignore_warnings: False
+
+# ask user for tags if none are provided in the config
+enforce_tags: True
+
+# pretty print config tree at the start of the run using Rich library
+print_config: True
+
+monitor: val/total_corr
+
+max_temperature: 1.0
+sim_margin: 0.4
+lambda_list: 1.0
+lambda_infonce: 10.0
+lambda_corr: 10.0
+
+input_dim: 48
+
+used_keys: ['clip32', 'pick', 'as', 'BLIP_ITC', 'BLIP_ITM', 'ImgReward', 'HPSv20', 'HPSv21'] 

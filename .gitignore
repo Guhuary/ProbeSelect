@@ -1,0 +1,17 @@
+/logs/*
+/workdir/*
+!/workdir/SD3M_IR_ema.ckpt
+!/workdir/SD3L_IR_ema.ckpt
+/notebooks/*
+/outputs
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Optional: common local files
+/.vscode/
+
+sep.ipynb

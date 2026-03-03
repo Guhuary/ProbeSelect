@@ -1,0 +1,28 @@
+_target_: src.data.latent_datamodule_PCA_alltime.LatentQualityDataModule
+args:
+  data_dir: ${paths.data_dir}
+  batch_size: 32   # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+  train_val_test_split: [0.8, 0.1, 0.1]
+  num_files: 50000
+  num_workers: 32
+  pin_memory: False
+  start_step: 19
+  end_step: 49
+  num_sampling_steps: 50
+  priors: {
+    'clip16': [31.9375, 2.8828],
+    'clip32': [31.7031, 2.8496],
+    'as': [5.2500, 0.7500],
+    'pick': [21.7344, 1.0449],
+    'ICT': [0.7173, 0.1714],
+    'HP': [0.7090, 0.1600],
+    'ICT_HP': [0.5181, 0.1835],
+    'BLIP_ITC': [0.4727, 0.0473],
+    'BLIP_ITM': [0.7344, 0.3247],
+    'ImgReward': [0.3594, 0.9424],
+    'HPSv20': [0.2815, 0.0165],
+    'HPSv21': [0.2576, 0.0344],
+  }
+  used_keys: ${extras.used_keys}
+  known_ts: [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.96]
+  fix_time: False
